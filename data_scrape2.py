@@ -19,25 +19,46 @@ def movie_info(soup):
   else:
     opening_weekend  = 0
 
-  return title, opening_weekend, foreign_gross
+  if soup.find(text=re.compile("Release Date:")):
+    release_date = soup.select("a[href^=/schedule/?view=bydate]")[0].attrs.get("href").split("&")[-2].replace('date=', '')
+  else:
+    release_date = None
+
+  return title, opening_weekend, foreign_gross, release_date
 
 
 def remove_noise_chars(string):
   return re.sub("[^0-9]", "", string)
 
 
-
-def open_pkl_pages(file):
-  with open(file, "r") as movie_pages:
+def open_pkl_pages(my_file):
+  ultimate_list=[]
+  with open(my_file, "r") as movie_pages:
     parsed_movie_pages = pkl.load(movie_pages)
-    for index, movie_page in enumerate(parsed_movie_pages):
-      soup_page = urllib2.urlopen(movie_page)
-      soup      = BS(soup_page)
-      if soup.find(text=re.compile("Opening Weekend")):
-        print movie_info(soup)
+    for index, (url, contents) in enumerate(parsed_movie_pages.items()):
+      soup      = BS(contents)
+      release_date = soup.find("title").text.split("(")[-1].split('-')[0].replace(')','')
+      if soup.find(text=re.compile("Opening Weekend")) and soup.find(text=re.compile("Foreign:")) and int(release_date) and int(release_date) > 1995:
+
+        ultimate_list.append(movie_info(soup))
+  return ultimate_list
+
+def export_to_csv(my_file):
+  with open("my_movie_shit_pre_reddit.csv", "wb") as movies:
+    data      = ["title", "opening_weekend", "foreign_gross", "release_date"]
+    writer    = csv.writer(movies)
+    writer.writerow(data)
+    ultimatum = open_pkl_pages(my_file)
+    for row in ultimatum:
+      print "Row has been written to CSV"
+      writer.writerow(row)
 
 
-open_pkl_pages("../page_data.pkl")
+export_to_csv("../page_data.pkl")
+# pprint(open_pkl_pages("../page_data.pkl"))
+# pprint(len(open_pkl_pages("../page_data.pkl")))
 
 # with open("page_data.pkl", "r") as movie_pages:
 #   parsed_movie_pages = pkl.load(movie_pages)
+
+
