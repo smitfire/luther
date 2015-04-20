@@ -18,7 +18,7 @@ def reddit_search():
   USERAGENT = "Script to search posts of certain movie titles activity by u/danger_ph0ne"
   r = praw.Reddit(user_agent=USERAGENT)
   ultimate_list = []
-  with open("my_movie_shit_pre_reddit.csv", "r") as movies:
+  with open("2007+_my_movie_shit_pre_reddit.csv", "r") as movies:
     reader    = csv.reader(movies)
     reader.next()
     for index, row in enumerate(reader):

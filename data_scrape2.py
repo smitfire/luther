@@ -38,13 +38,13 @@ def open_pkl_pages(my_file):
     for index, (url, contents) in enumerate(parsed_movie_pages.items()):
       soup      = BS(contents)
       release_date = soup.find("title").text.split("(")[-1].split('-')[0].replace(')','')
-      if soup.find(text=re.compile("Opening Weekend")) and soup.find(text=re.compile("Foreign:")) and int(release_date) and int(release_date) > 1995:
+      if soup.find(text=re.compile("Opening Weekend")) and soup.find(text=re.compile("Foreign:")) and int(release_date) and int(release_date) > 2007:
 
         ultimate_list.append(movie_info(soup))
   return ultimate_list
 
 def export_to_csv(my_file):
-  with open("my_movie_shit_pre_reddit.csv", "wb") as movies:
+  with open("2007+_my_movie_shit_pre_reddit.csv", "wb") as movies:
     data      = ["title", "opening_weekend", "foreign_gross", "release_date"]
     writer    = csv.writer(movies)
     writer.writerow(data)
