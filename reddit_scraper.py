@@ -55,4 +55,33 @@ def export_to_csv():
       writer.writerow(row)
 
 
-export_to_csv()
+def remove_pre_2010(csvfile):
+  remaining=[]
+  with open("complete.csv", "r") as movies:
+    reader = csv.reader(movies)
+    reader.next()
+    for index, row in enumerate(reader):
+      if int(row[-3][0:4]) > 2010 and row[-1] != 0 and row[-2] != 0:
+        remaining.append(row)
+  with open("2complete_post2010.csv", "wb") as movies:
+    data   = ["title", "opening_weekend", "foreign_gross", "release_date", "posts_score", "comments_score"]
+    writer = csv.writer(movies)
+    writer.writerow(data)
+    for row in remaining:
+      writer.writerow(row)
+
+  print "Your File Of Movies Has Been Completed"
+
+
+
+
+
+# fg = 1.103344e+08
+# ow = 2.250218e+07
+fw_real = 110334400
+ow_real = 22502180*5
+
+# export_to_csv()
+
+remove_pre_2010("complete.csv")
+
