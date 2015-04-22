@@ -22,8 +22,8 @@ def reddit_search():
     reader    = csv.reader(movies)
     reader.next()
     for index, row in enumerate(reader):
-      if index==1:
-        break
+      # if index==1:
+      #   break
       date_time = row[-1] + " 00:00:00"
       pattern = '%Y-%m-%d %H:%M:%S'
       epoch_start = int(time.mktime(time.strptime(date_time, pattern)))
@@ -34,16 +34,45 @@ def reddit_search():
       posts_score = []
       comments_score = []
       for post in ressy_res_res:
-        posts_score.append(post.score)
+        if post.score:
+          posts_score.append(post.score)
+        else:
+          posts_score.append(0)
         comments = praw.helpers.flatten_tree(post.comments)
         for comment in comments:
-          comments_score.append(comment.score)
+          try:
+            comments_score.append(comment.score)
+          except Exception, e:
+            print e
+          else:
+            comments_score.append(0)
 
-      print "sum of posts = " + str(sum(posts_score))
-      print "sum of comments = " + str(sum(comments_score))
+      new_row = row + [sum(posts_score), sum(comments_score)]
+      print row
+      print new_row
+      ultimate_list.append(new_row)
+
+    return ultimate_list
 
 
-reddit_search()
+test = [
+        ['Love Comes Lately', '14610', '49879', '2008-06-13'],
+        ['Dead Man Down', '5345250', '7179244', '2013-03-08']
+      ]
+test1= [['Love Comes Lately', '14610', '49879', '2008-06-13', 87, 771]]
+
+def export_to_csv():
+  with open("complete.csv", "wb") as movies:
+    data   = ["title", "opening_weekend", "foreign_gross", "release_date", "posts_score", "comments_score"]
+    writer = csv.writer(movies)
+    writer.writerow(data)
+    ultimatum = reddit_search()
+    for row in ultimatum:
+      print "Row has been written to CSV"
+      writer.writerow(row)
+
+# pp(reddit_search())
+export_to_csv()
 
 # hot_movies = r.get_subreddit("movies").get_top(limit=5)
 # fast7_top = r.search("Fast7", limit=10, )
