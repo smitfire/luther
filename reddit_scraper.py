@@ -4,15 +4,6 @@ from pprint import pprint as pp
 import inspect
 import csv
 
-# search(query, subreddit=None, sort=None, syntax=None, period=None, *args, **kwargs
-
-date_time = '29.08.2011 11:05:02'
-pattern = '%d.%m.%Y %H:%M:%S'
-epoch = int(time.mktime(time.strptime(date_time, pattern)))
-# print epoch
-
-
-
 
 def reddit_search():
   USERAGENT = "Script to search posts of certain movie titles activity by u/danger_ph0ne"
@@ -22,8 +13,6 @@ def reddit_search():
     reader    = csv.reader(movies)
     reader.next()
     for index, row in enumerate(reader):
-      # if index==1:
-      #   break
       date_time = row[-1] + " 00:00:00"
       pattern = '%Y-%m-%d %H:%M:%S'
       epoch_start = int(time.mktime(time.strptime(date_time, pattern)))
@@ -55,12 +44,6 @@ def reddit_search():
     return ultimate_list
 
 
-test = [
-        ['Love Comes Lately', '14610', '49879', '2008-06-13'],
-        ['Dead Man Down', '5345250', '7179244', '2013-03-08']
-      ]
-test1= [['Love Comes Lately', '14610', '49879', '2008-06-13', 87, 771]]
-
 def export_to_csv():
   with open("complete.csv", "wb") as movies:
     data   = ["title", "opening_weekend", "foreign_gross", "release_date", "posts_score", "comments_score"]
@@ -71,17 +54,5 @@ def export_to_csv():
       print "Row has been written to CSV"
       writer.writerow(row)
 
-# pp(reddit_search())
+
 export_to_csv()
-
-# hot_movies = r.get_subreddit("movies").get_top(limit=5)
-# fast7_top = r.search("Fast7", limit=10, )
-# print "fetching movie info..."
-
-
-# fast7_top
-
-# for movie_post in fast7_top:
-#   comments = praw.helpers.flatten_tree(movie_post.comments)
-#   for index, comment in enumerate(comments):
-#     print comment.score
