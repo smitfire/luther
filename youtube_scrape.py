@@ -25,7 +25,7 @@ def add_youtube_vid_ids(mycsv):
         break
       full_url = utube_srch_url + row[0].replace(' ', '+')
       print full_url
-      rand_t = random.randint(4,10)
+      rand_t = random.randint(4,10`)
       time.sleep(rand_t)
       page = urllib2.urlopen(full_url)
       soup = BS(page)
