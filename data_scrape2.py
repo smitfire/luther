@@ -53,7 +53,7 @@ def export_to_csv(my_file):
       print "Row has been written to CSV"
       writer.writerow(row)
 
-
+2
 export_to_csv("../page_data.pkl")
 # pprint(open_pkl_pages("../page_data.pkl"))
 # pprint(len(open_pkl_pages("../page_data.pkl")))
